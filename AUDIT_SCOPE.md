@@ -1,7 +1,7 @@
 # Audit scope
 
 Written for an outside, independent security audit. Revision described:
-`fce9843500629b7049853a9bedd41990e2c8bf39` on `main`, 2026-10-26. Everything below is taken from
+`cf3369b10a167f028e705456626088ae2c1307d5` on `main`, 2026-11-01. Everything below is taken from
 the repository's own files at that revision; items marked NOT_RUN were not executed while writing
 this document.
 
@@ -68,7 +68,9 @@ cargo clippy --release -- -D warnings
 
 - AGENTS.md: `cargo test` runs 9 unit tests in `src/site.rs` and `src/handler.rs`.
 - The Pi deployment and `deploy/publish-site.sh` need sudo and a remote host and are not a test.
-- All commands above: NOT_RUN while writing this document.
+- Run 2026-11-04 on this branch merged with `main` at `cf3369b` (rustc 1.98.1, aarch64 Linux):
+  `cargo test --locked` 9 passed, 0 failed; `cargo clippy --locked --release -- -D warnings` exit 0;
+  `cargo build --locked --release` exit 0; `cargo audit` exit 0, no advisories (EXERCISED).
 
 ## Known limitations and NOT_RUN
 
@@ -82,7 +84,8 @@ cargo clippy --release -- -D warnings
 ## Dependencies and provenance
 
 - `Cargo.lock`: hyper, rustls, rustls-acme, tracing, brotli and gzip encoders, `tempfile` for
-  tests. The TLS library was updated for security on 2026-10-17 (README).
+  tests. The TLS library was updated for security on 2026-10-17 (README); `rustls-webpki`,
+  `webpki-roots` and `tokio` were patched on 2026-11-01 (`cf3369b`, #14).
 - External services: Let's Encrypt.
 - Licence: AGPL-3.0-or-later (`LICENSE`, `Cargo.toml`); `COVENANT.md` is nonbinding.
 
