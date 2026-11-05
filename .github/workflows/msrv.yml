@@ -1,0 +1,28 @@
+name: msrv
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  msrv:
+    name: build and test on the MSRV
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - name: rust-version in Cargo.toml matches rust-toolchain.toml
+        run: |
+          msrv=$(sed -n 's/^rust-version = "\(.*\)"$/\1/p' Cargo.toml)
+          pin=$(sed -n 's/^channel = "\(.*\)"$/\1/p' rust-toolchain.toml)
+          echo "Cargo.toml rust-version=$msrv rust-toolchain.toml channel=$pin"
+          case "$pin" in "$msrv"|"$msrv".*) ;; *) echo "mismatch"; exit 1 ;; esac
+      - name: install the pinned toolchain
+        run: rustup toolchain install "$(sed -n 's/^channel = "\(.*\)"$/\1/p' rust-toolchain.toml)" --profile minimal --component clippy
+      - run: rustc --version && cargo --version
+      - run: cargo build --locked
+      - run: cargo test --locked
+      - run: cargo clippy --release --locked -- -D warnings

@@ -47,6 +47,8 @@ Not measured on a Pi.
 
 ## Build and test
 
+Needs Rust 1.88 or newer (`rust-version` in `Cargo.toml`). `rust-toolchain.toml` pins 1.88.0, so rustup uses that release in this directory. The `msrv` workflow builds, tests and lints on it with `--locked` for every pull request.
+
 ```bash
 cargo test
 cargo clippy --release -- -D warnings

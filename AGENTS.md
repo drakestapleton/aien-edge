@@ -20,7 +20,7 @@ cd aien-edge
 cargo build --release   # writes target/release/aien-edge
 ```
 
-Needs a stable Rust toolchain. `Cargo.lock` is committed. aarch64 builds run on a 64-bit Raspberry Pi OS.
+Needs Rust 1.88 or newer: `rust-version = "1.88"` in `Cargo.toml`, and `rust-toolchain.toml` pins 1.88.0 so rustup selects it here. 1.88 is the oldest release that builds the locked dependencies (`time` 0.3.55 needs 1.88; several crates use edition 2024). When a dependency update raises that floor, raise `rust-version`, the `rust-toolchain.toml` channel and this line together. `Cargo.lock` is committed. aarch64 builds run on a 64-bit Raspberry Pi OS.
 
 ## Configuration
 
@@ -42,7 +42,7 @@ target/release/aien-edge <config.toml>  # serves until stopped; SIGHUP reloads e
 
 - Running the binary opens network listeners. For a local run use a config without `[tls]`, a non-privileged `http_listen`, and a `[[site]]` root that holds a built site with `index.html`.
 - Deploying (`README.md`, "Deploy on the Pi") needs a Raspberry Pi with systemd, sudo, ports 80 and 443 forwarded to it, and DNS pointing at it. `deploy/aien-edge.service` runs it with `DynamicUser=yes`, `CAP_NET_BIND_SERVICE` only and a read-only `/srv/sites`.
-- There are no CI workflows in this repository. Run the three cargo commands above before opening a pull request.
+- `.github/workflows/msrv.yml` checks that `rust-version` matches the `rust-toolchain.toml` channel, then runs `cargo build`, `cargo test` and `cargo clippy --release -- -D warnings` with `--locked` on that toolchain for every pull request and push to `main`. Run the three cargo commands above before opening a pull request.
 
 ## Conventions
 

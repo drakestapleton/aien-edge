@@ -2,6 +2,7 @@
 name = "aien-edge"
 version = "0.1.0"
 edition = "2021"
+rust-version = "1.88"
 description = "Native Rust edge server for AIEN static sites: in-memory precompressed assets, virtual hosts, and automatic Let's Encrypt TLS"
 license = "AGPL-3.0-or-later"
 authors = ["Drake Stapleton <aien@aienos.com>"]
