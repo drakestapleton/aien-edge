@@ -11,7 +11,7 @@ repository = "https://github.com/aien-dev/aien-edge"
 [dependencies]
 arc-swap = "1"
 blake3 = "1"
-brotli = "8"
+brotli = "9"
 bytes = "1"
 flate2 = "1"
 http = "1"
